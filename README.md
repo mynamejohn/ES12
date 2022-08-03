@@ -7,8 +7,7 @@ https://www.youtube.com/watch?v=2ElITe_TY2I&ab_channel=%EB%B0%95%EC%9C%A0%EC%A7%
 
 
 ``` C#
-public class ActiveDialogue : MonoBehaviour
-{
+public class ActiveDialogue : MonoBehaviour {
     TextAsset data;                    //Json파일을 문자열로 읽어들임
     public string EventName;        //실행시킬 대화 이벤트 파일의 이름
     public bool DestroyActivated;           //1번 실행하고 오브젝트를 지울것인지의 여부
@@ -19,18 +18,15 @@ public class ActiveDialogue : MonoBehaviour
 
     JsonData ConvertedData;                 //data로 읽어들인 텍스트를 객체로 변환하여 저장
     
-    void Start ()
-    {
+    void Start ()    {
         control = FindObjectOfType<ControlDialogue>();
         data = Resources.Load<TextAsset>(EventName);
         ConvertedData = JsonMapper.ToObject(data.text);//Json 객체로 변환
     }
-    public void Click_obj()
-    {
-        if (WaitForClick)
-        {
-            if (control.isActive == false)                            //충돌처리 구현필요
-            {
+    public void Click_obj()    {
+        if (WaitForClick)        {
+            if (control.isActive == false)     {                      //충돌처리 구현필요
+            
                 NotNum = true;
                 control.LoadJSON(ConvertedData, WaitForClick);
                 if (DestroyActivated)
@@ -42,12 +38,9 @@ public class ActiveDialogue : MonoBehaviour
         else
             return; 
     }
-    public void SpecialItem()
-    {
-        if (WaitForClick)
-        {
-            if (control.isActive == false)                            
-            {
+    public void SpecialItem()    {
+        if (WaitForClick)        {
+            if (control.isActive == false)            {
                 NotNum = true;
                 control.LoadJSON(ConvertedData, WaitForClick,true);
                 if (DestroyActivated)
@@ -59,12 +52,9 @@ public class ActiveDialogue : MonoBehaviour
         else
             return;
     }
-    public void SpecialDragItem(JsonData CData, bool Wait)
-    {
-        if (WaitForClick)
-        {
-            if (control.isActive == false)                            
-            {
+    public void SpecialDragItem(JsonData CData, bool Wait)    {
+        if (WaitForClick)        {
+            if (control.isActive == false)            {
                 NotNum = true;
                 control.LoadJSON(CData, Wait, true);
 
@@ -77,14 +67,11 @@ public class ActiveDialogue : MonoBehaviour
         else
             return;
     }
-    void OnTriggerEnter2D(Collider2D other)
-    {
+    void OnTriggerEnter2D(Collider2D other)    {
         if (WaitForClick || control.isActive)
             return;
-        else
-        {
-            if (other.name == "2_Player")
-            {
+        else        {
+            if (other.name == "2_Player")       {
                 control.LoadJSON(ConvertedData, WaitForClick);
                 if (DestroyActivated)
                       Destroy(gameObject);
@@ -97,23 +84,20 @@ public class ActiveDialogue : MonoBehaviour
 * GameLoader.cs - 세이브/로드
 
 ``` C#
-    public void SaveGame(int stage)
-    {
+    public void SaveGame(int stage)    {
         ConversationData = JsonMapper.ToJson(KWManager.GetKeywordData());
         StatusofStage = stage;
         File.WriteAllText(savePath+"/DATA.json", ConversationData.ToString());
         File.WriteAllText(savePath + "/stage.txt", StatusofStage.ToString());
         StartCoroutine(SavingImage());
     }
-    public void SaveKeywordData()
-    {
+    public void SaveKeywordData()    {
         ConversationData = JsonMapper.ToJson(KWManager.GetKeywordData());
         File.WriteAllText(savePath + "/DATA.json", ConversationData.ToString());
         StartCoroutine(SavingImage());
 
     }
-    public int LoadGame()
-    {
+    public int LoadGame()    {
         ConversationData = JsonMapper.ToObject(File.ReadAllText(savePath + "/DATA.json"));
         StatusofStage = int.Parse(File.ReadAllText(savePath + "/stage.txt"));
         KWManager.LoadKeyWord(ConversationData);
